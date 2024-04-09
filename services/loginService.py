@@ -8,8 +8,6 @@ from db.connection import get_connection
 
 
 
-def serviceLogin(username, password):
-    conn = get_connection()
     
 def serviceRegister(username, password, rol):
     conn = get_connection()
@@ -33,6 +31,20 @@ def getPassword(username):
     try:
         with conn.cursor() as cursor:
             cursor.execute("SELECT contraseña FROM usuarios WHERE nombre_usuario = %s", (username,))
+            result = cursor.fetchone()
+            return result if result else None
+    except Exception as e:
+        return None
+    finally:
+        conn.close()
+
+def getRole(username):
+    conn = get_connection()
+    if conn is None:
+        return None 
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT rol FROM usuarios WHERE nombre_usuario = %s", (username,))
             result = cursor.fetchone()
             return result if result else None
     except Exception as e:

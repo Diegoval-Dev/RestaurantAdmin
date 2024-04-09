@@ -6,7 +6,7 @@ project_root = script_location.parent.parent
 sys.path.append(str(project_root))
 #imports of modules from the project
 
-from services.loginService import serviceLogin, serviceRegister, getPassword
+from services.loginService import serviceRegister, getPassword, getRole
 
 
 def registerController(username, password, rol):
@@ -31,7 +31,8 @@ def loginController(username, password):
             hashed_password = bytes.fromhex(hashed_password) 
 
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
-                return {"success": True, "message": "Inicio de sesión exitoso"}
+                rol = getRole(username)
+                return {"success": True, "message": "Inicio de sesión exitoso", "rol": rol[0]}
             else:
                 return {"success": False, "message": "Contraseña incorrecta"}
         except Exception as e:

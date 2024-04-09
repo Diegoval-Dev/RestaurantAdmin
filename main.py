@@ -15,8 +15,9 @@ def login():
     
     if result["success"]:
         print("Inicio de sesión exitoso")
+        rol = result["rol"]
         logeado = True
-        dashboard("MESERO")
+        dashboard(rol)
     else:
         print("Error al iniciar sesión:", result["message"])
         start()
@@ -64,7 +65,7 @@ def start():
 
 
 def dashboard(rol):
-    print("Bienvenido al dashboard")
+    print("Bienvenido al dashboard", rol)
 
 start()
 
