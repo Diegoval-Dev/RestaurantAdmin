@@ -210,6 +210,10 @@ def dashboard(rol):
                 viewTables()
             else:
                 print("Opción no válida")
+        if rol == "chef":
+            pass
+        if rol == "bartender":
+            pass
         else:
             print("Opción no válida")
 
