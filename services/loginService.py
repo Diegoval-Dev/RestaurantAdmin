@@ -56,3 +56,17 @@ def getRole(username):
         return None
     finally:
         conn.close()
+
+def getUserId(username):
+    conn = get_connection()
+    if conn is None:
+        return None 
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT id_usuario FROM usuarios WHERE nombre_usuario = %s", (username,))
+            result = cursor.fetchone()
+            return result if result else None
+    except Exception as e:
+        return None
+    finally:
+        conn.close()

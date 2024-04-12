@@ -8,7 +8,7 @@ project_root = script_location.parent.parent
 sys.path.append(str(project_root))
 #imports of modules from the project
 
-from services.loginService import serviceRegister, getPassword, getRole
+from services.loginService import serviceRegister, getPassword, getRole, getUserId
 
 
 def registerController(username, password, rol):
@@ -43,6 +43,13 @@ def loginController(username, password):
                 return {"success": False, "error": "Contraseña incorrecta"}
         except Exception as e:
             return {"success": False, "error": "Error al procesar la solicitud de inicio de sesión." + str(e)}
+        
+def getId(username):
+    result = getUserId(username)
+    if result:
+        return result[0]
+    else:
+        return None
 
 
 

@@ -2,12 +2,46 @@ import getpass
 import os
 import msvcrt
 
-from controllers.loginController import registerController, loginController
+from controllers.loginController import registerController, loginController, getId
 from controllers.areaController import createAreaController, viewAreasController
 from controllers.tableController import createTableController, viewTablesController
 from controllers.waiterController import createNewWaiter
 
 logeado = False
+
+def createUsers():
+    clear()
+    print("Crear nuevo usuario")
+    username = input("Ingrese el nombre de usuario: ")
+    password = getpass.getpass("Ingrese la contraseña: ")
+    rol = input("Ingrese el rol: ")
+    result = registerController(username, password, rol)
+    if result["success"]:
+        print("Usuario creado con éxito. Presione cualquier tecla para continuar")
+        msvcrt.getch()
+        id = getId(username)
+        if rol == "mesero":
+            print("Crear nuevo mesero")
+            print("Vizualice las areas para asignar al mesero")
+            viewAreas()
+            areaid = input("Ingrese el id del área: ")
+            name = input("Ingrese el nombre del mesero: ")
+            result = createNewWaiter(areaid, name, id)
+            if result["success"]:
+                print("Mesero creado con éxito. Presione cualquier tecla para continuar")
+                msvcrt.getch()
+            else:
+                print(result["error"], " Presione cualquier tecla para continuar")
+                msvcrt.getch()
+        if rol == "chef":
+            pass
+        if rol == "bartender":
+            pass
+        if rol == "admin":
+            pass
+    else:
+        print(result["error"], " Presione cualquier tecla para continuar")
+        msvcrt.getch()
 
 def viewTables():
     clear()
@@ -27,6 +61,7 @@ def viewTables():
 def createNewTable():
     clear()
     print("Crear nueva mesa")
+    print/("Vizualice las áreas para asignar la mesa")
     viewAreas()
     area_id = input("Ingrese el id del área: ")
     capacity = input("Ingrese la capacidad de la mesa: ")
@@ -146,6 +181,7 @@ def dashboard(rol):
             print("2. Ver Areas")
             print("3. Crear Mesa")
             print("4. Ver Mesas")
+            print("5. Crear usuarios")
             print("6. Salir")
             opcion = input("Ingrese la opción deseada: ")
 
@@ -157,23 +193,25 @@ def dashboard(rol):
                 createNewTable()
             if opcion == "4":
                 viewTables()
+            if opcion == "5":
+                createUsers()
             if opcion == "6":
                 logeado = False
                 start()
             else:
-                pass
-        else:
-            print("2. Ver menú")
-            print("3. Realizar pedido")
-            print("4. Ver pedidos")
-            print("5. Log out")
+                print("Opción no válida")
+        if rol == "mesero":
+            print("1. Ver mesas")
+            print("2. Tomar pedido")
+            print("3. Ver pedidos")
+            print("4. Salir")
             opcion = input("Ingrese la opción deseada: ")
-            if opcion == "5":
-                logeado = False
-                start()
+            if opcion == "1":
+                viewTables()
             else:
                 print("Opción no válida")
-                dashboard(rol)
+        else:
+            print("Opción no válida")
 
 start()
 
