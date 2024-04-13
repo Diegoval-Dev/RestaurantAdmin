@@ -1,38 +1,39 @@
-#importaciones para la ruta
 import sys
 from pathlib import Path
 script_location = Path(__file__).absolute()
 project_root = script_location.parent.parent
 sys.path.append(str(project_root))
 
-from services.tableService import serviceCreateNewTable, serviceViewTables, serviceBillOpen
+from services.countService import serviceCreateNewCount, serviceViewCount, serviceGetCountID
 
-def createTableController(area_id, capacity, moveable):
+
+def createCountController(tableid):
     try:
-        result = serviceCreateNewTable(area_id, capacity, moveable)
+        result = serviceCreateNewCount(tableid)
         if result["success"]:
-            return {"success": True, "message": "Mesa registrada exitosamente."}
+            return {"success": True, "message": "Cuenta abierta exitosamente."}
         else:
             return {"success": False, "error": result["error"]}
     except Exception as e:
         return {"success": False, "error": "Error al procesar la solicitud de registro." + str(e)}
     
-def viewTablesController():
+
+def viewCountController(countid):
     try:
-        result = serviceViewTables()
+        result = serviceViewCount(countid)
         if result["success"]:
             return {"success": True, "data": result["data"]}
         else:
             return {"success": False, "error": result["error"]}
     except Exception as e:
         return {"success": False, "error": "Error al procesar la solicitud de registro." + str(e)}
-    
-def tableHasOpenBill(tableid):
-    billOpen = serviceBillOpen(tableid)
-    if billOpen["success"]:
-        return True
+
+"""
+esta funcion recibe el id de una mesa y devuelve el id de la cuenta que esta abierta en esa mesa
+"""
+def getCountID(tableid):
+    result = serviceGetCountID(tableid)
+    if result["success"]:
+        return result["data"]
     else:
-        return False
-    
-
-
+        return None

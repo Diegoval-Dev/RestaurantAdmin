@@ -7,13 +7,19 @@ sys.path.append(str(project_root))
 
 from db.connection import get_connection
 
-def serviceCreateNewTable(area_id, capacity, moveable):
+"""
+Esta funcion recine el id de una mesa y le abre una cuenta en la base de datos
+recibe: id de la mesa
+Devuelve:   {"success": True} si la cuenta se abrio correctamente
+            {"success": False, "error": "mensaje de error"} si hubo un error en la consulta 
+"""
+def serviceCreateNewCount(tableid):
     conn = get_connection()
     if conn is None:
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("INSERT INTO mesa (areaid, capacidad, moveable) VALUES (%s, %s, %s)", (area_id, capacity, moveable))
+            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
             conn.commit()
             return {"success": True}
     except Exception as e:
@@ -21,13 +27,16 @@ def serviceCreateNewTable(area_id, capacity, moveable):
     finally:
         conn.close()
 
-def serviceViewTables():
+"""
+Esta funcion devuelve una cuenta de la base de datos
+"""
+def serviceViewCount(countid):
     conn = get_connection()
     if conn is None:
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM mesa")
+            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
             result = cursor.fetchall()
             return {"success": True, "data": result}
     except Exception as e:
@@ -35,14 +44,11 @@ def serviceViewTables():
     finally:
         conn.close()
 
+
 """
-Esta funcion recine el id de una mesa y retorna si tiene una cuenta abierta o no
-recibe: id de la mesa
-Devuelve:   {"success": True, "data": True} si la mesa tiene una cuenta abierta
-            {"success": True, "data": False} si la mesa no tiene una cuenta abierta
-            {"success": False, "error": "mensaje de error"} si hubo un error en la consulta 
+esta funcion recibe el id de una mesa y devuelve el id de la cuenta que esta abierta en esa mesa
 """
-def serviceBillOpen(tableid):
+def serviceGetCountID(tableid):
     conn = get_connection()
     if conn is None:
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
@@ -55,5 +61,3 @@ def serviceBillOpen(tableid):
         return {"success": False, "error": str(e)}
     finally:
         conn.close()
-
-

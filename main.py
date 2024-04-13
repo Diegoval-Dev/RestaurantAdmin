@@ -4,10 +4,109 @@ import msvcrt
 
 from controllers.loginController import registerController, loginController, getId
 from controllers.areaController import createAreaController, viewAreasController
-from controllers.tableController import createTableController, viewTablesController
+from controllers.tableController import createTableController, viewTablesController, tableHasOpenBill
 from controllers.waiterController import createNewWaiter
+from controllers.foodController import viewFoodMenuController, addProductToBillController
+from controllers.CountController import createCountController, viewCountController, getCountID
 
 logeado = False
+
+def addFoodMenu(count_id):
+    clear()
+    print("Menú de comida")
+    print("ID\tNombre\tPrecio")
+    food = viewFoodMenuController()
+    for f in food:
+        print(f"{f[0]}\t{f[1]}\t{f[2]}")
+    print("elija el id del producto para agregar a la cuenta, 0 para salir")
+    id = input("Ingrese el id del producto: ")
+    if id == "0":
+        return
+    print("Cantidad: ")
+    quantity = input("Ingrese la cantidad: ")
+    result = addProductToBillController(id, quantity, count_id)
+    if result["success"]:
+        print("Producto agregado con éxito. Presione cualquier tecla para continuar")
+        msvcrt.getch()
+    else:
+        print(result["error"], " Presione cualquier tecla para continuar")
+        msvcrt.getch()
+
+def addProductToBill(count_id):
+    clear()
+    print("Agregar producto a la cuenta de la mesa. Cuenta: ", count_id)
+    print("1. Comida")
+    print("2. Bebida")
+    print("3. Salir")
+    opcion = input("Ingrese la opción deseada: ")
+    if opcion == "1":
+        addFoodMenu(count_id)
+    if opcion == "2":
+        pass
+    if opcion == "3":
+        pass
+
+def viewBill(table_id):
+    clear()
+    print("Cuenta de la mesa", table_id)
+    print("ID\tNombre\tCantidad\tPrecio\tTotal")
+    result = viewCountController(table_id)
+    #Aqui se imprimen los productos de la cuenta
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+def tableBill(table_id):
+    isOpenBill = tableHasOpenBill(table_id)
+    clear()
+    if isOpenBill:
+        print("La mesa tiene una cuenta abierta")
+        count_id = getCountID(table_id)
+        print("Que desea hacer?")
+        print("1. Ver cuenta")
+        print("2. Agregar a la cuenta")
+        print("3. Cerrar cuenta")
+        print("4. Salir")
+        opcion = input("Ingrese la opción deseada: ")
+        if opcion == "1":
+            viewBill(count_id)
+        if opcion == "2":
+            addProductToBill(count_id)
+        if opcion == "3":
+            pass
+        if opcion == "4":
+            pass
+    else:
+        print("La mesa no tiene una cuenta abierta")
+        print("Desea abrir una cuenta en la mesa?")
+        print("1. Si")
+        print("2. No")
+        opcion = input("Ingrese la opción deseada: ")
+        if opcion == "1":
+            result = createCountController(table_id)
+            if result["success"]:
+                print("Cuenta abierta con éxito. Presione cualquier tecla para continuar")
+                msvcrt.getch()
+        if opcion == "2":
+            pass
+
+def selectTable():
+    clear()
+    print("Seleccione una mesa")
+    viewTables()
+    table_id = input("Ingrese el id de la mesa: ")
+    print("Que desea hacer?")
+    print("1. Abrir cuenta en mesa")
+    print("2. Juntar mesa")
+    print("3. Salir")
+    opcion = input("Ingrese la opción deseada: ")
+    if opcion == "1":
+        tableBill(table_id)
+    if opcion == "2":
+        pass
+    if opcion == "3":
+        pass
+    else:
+        print("Opción no válida")
 
 def createUsers():
     clear()
@@ -53,7 +152,7 @@ def viewTables():
 
     for table in tables:
         moveable = "Sí" if table[3] else "No"
-        print(f"{table[0]}\t{table[1]}\t{table[2]}\t{moveable}")
+        print(f"{table[0]}\t{table[1]}\t{table[2]}\t\t{moveable}")
 
     print("Presione cualquier tecla para continuar...")
     msvcrt.getch()  
@@ -201,7 +300,7 @@ def dashboard(rol):
             else:
                 print("Opción no válida")
         if rol == "mesero":
-            print("1. Ver mesas")
+            print("1. Seleccionar mesa")
             print("2. Tomar pedido")
             print("3. Ver pedidos")
             print("4. Salir")
