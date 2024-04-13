@@ -307,6 +307,7 @@ def dashboard(rol):
             opcion = input("Ingrese la opción deseada: ")
             if opcion == "1":
                 viewTables()
+                selectTable()
             else:
                 print("Opción no válida")
         if rol == "chef":
