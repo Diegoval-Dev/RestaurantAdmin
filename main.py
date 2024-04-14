@@ -269,6 +269,13 @@ def start():
         print("Opción no válida")
 
 
+
+def takeOrder(table_id):
+    addProductToBill(table_id) 
+
+def viewOrders(table_id):
+    viewBill(table_id) 
+
 def dashboard(rol):
     global logeado
     while logeado:
@@ -308,6 +315,14 @@ def dashboard(rol):
             if opcion == "1":
                 viewTables()
                 selectTable()
+            if opcion == "2":
+                table_id = input("Ingrese el ID de la mesa para tomar el pedido: ")
+                takeOrder(table_id)
+            if opcion == "3":
+                table_id = input("Ingrese el ID de la mesa para ver los pedidos: ")
+                viewOrders(table_id)
+            if opcion == "4":
+                pass
             else:
                 print("Opción no válida")
         if rol == "chef":

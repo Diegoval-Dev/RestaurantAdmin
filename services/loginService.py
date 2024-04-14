@@ -32,7 +32,7 @@ def getPassword(username):
         return None 
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT contraseña FROM usuarios WHERE nombre_usuario = %s", (username,))
+            cursor.execute("SELECT contrasenia FROM usuarios WHERE nombre_usuario = %s", (username,))
             result = cursor.fetchone()
             if result:
                 return {"success": True, "data": result}
