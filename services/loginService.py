@@ -17,7 +17,7 @@ def serviceRegister(username, password, rol):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("INSERT INTO usuarios (nombre_usuario, contraseña, rol) VALUES (%s, %s, %s)", (username, password, rol))
+            cursor.execute("INSERT INTO usuarios (nombre_usuario, contrasenia, rol) VALUES (%s, %s, %s)", (username, password, rol))
             conn.commit()
             return {"success": True}
     except Exception as e:

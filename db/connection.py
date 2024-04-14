@@ -6,7 +6,7 @@ def get_connection():
             host="localhost",
             user="postgres",
             password="admin",
-            database="Restaurante"
+            database="Proyecto2BD"
         )
         return connection
     except Exception as e:

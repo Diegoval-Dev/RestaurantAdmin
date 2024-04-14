@@ -46,11 +46,11 @@ def addProductToBill(count_id):
     if opcion == "3":
         pass
 
-def viewBill(table_id):
+def viewBill(countid):
     clear()
-    print("Cuenta de la mesa", table_id)
+    print("Cuenta de la mesa", countid)
     print("ID\tNombre\tCantidad\tPrecio\tTotal")
-    result = viewCountController(table_id)
+    result = viewCountController(countid)
     #Aqui se imprimen los productos de la cuenta
     print("Presione cualquier tecla para continuar...")
     msvcrt.getch()
@@ -274,7 +274,8 @@ def takeOrder(table_id):
     addProductToBill(table_id) 
 
 def viewOrders(table_id):
-    viewBill(table_id) 
+    count_id = getCountID(table_id)
+    viewBill(count_id)
 
 def dashboard(rol):
     global logeado
@@ -322,7 +323,8 @@ def dashboard(rol):
                 table_id = input("Ingrese el ID de la mesa para ver los pedidos: ")
                 viewOrders(table_id)
             if opcion == "4":
-                pass
+                logeado = False
+                start()
             else:
                 print("Opción no válida")
         if rol == "chef":

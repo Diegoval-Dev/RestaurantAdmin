@@ -4,7 +4,7 @@ script_location = Path(__file__).absolute()
 project_root = script_location.parent.parent
 sys.path.append(str(project_root))
 
-from services.foodService import serviceViewFoodMenu, serviceViewDrinkMenu
+from services.foodService import serviceViewFoodMenu, serviceViewDrinkMenu, addProductToBill
 
 """
 Esta funcion devuelve el menu de comida de la base de datos
@@ -40,4 +40,11 @@ Devuelve:   {"success": True} si el producto se agrego correctamente
             {"success": False, "error": "mensaje de error"} si hubo un error en la consulta 
 """
 def addProductToBillController(id, quantity, count_id):
-    pass
+    try:
+        result = addProductToBill(id, quantity, count_id)
+        if result["success"]:
+            return {"success": True, "data": result}
+        else:
+            return []
+    except Exception as e:
+        return []

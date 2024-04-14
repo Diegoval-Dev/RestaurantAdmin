@@ -15,7 +15,7 @@ def serviceViewFoodMenu():
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
+            cursor.execute("SELECT platoid, name, price FROM plato")
             result = cursor.fetchall()
             return {"success": True, "data": result}
     except Exception as e:
@@ -32,10 +32,28 @@ def serviceViewDrinkMenu():
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
+            cursor.execute("SELECT * FROM bebida")
             result = cursor.fetchall()
             return {"success": True, "data": result}
     except Exception as e:
         return {"success": False, "error": str(e)}
     finally:
         conn.close()
+        
+        
+def addProductToBill(id, quantity, count_id):
+    conn = get_connection()
+    if conn is None:
+        return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("select * from cuenta_plato")
+            result = cursor.fetchall()
+            return {"success": True, "data": result}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+        
+        
+        
