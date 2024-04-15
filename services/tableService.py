@@ -83,7 +83,6 @@ def serviceBillOpen(tableid):
             result = queryResult[0]
             return {"success": True, "data": result}
     except Exception as e:
-        print("exception: " + str(e))
         return {"success": False, "error": str(e)}
     finally:
         conn.close()
@@ -94,7 +93,7 @@ def serviceViewTablesToJoin(areaid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("select mesa.mesaid from mesa join cuenta on mesa.mesaid = cuenta.mesaid where areaid = %s and moveable = 'true' and is_open = true and cuenta.mesaid != %s", [areaid, areaid])
+            cursor.execute("select * from mesa where areaid = %s and moveable = 'true'", [areaid])
             result = cursor.fetchall()
             return {"success": True, "data": result}
     except Exception as e:

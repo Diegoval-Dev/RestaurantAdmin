@@ -121,6 +121,9 @@ def tableBill(table_id):
             if result["success"]:
                 print("Cuenta abierta con éxito. Presione cualquier tecla para continuar")
                 msvcrt.getch()
+            else:
+                print(result)
+                msvcrt.getch()
         if opcion == "2":
             pass
 
@@ -128,14 +131,14 @@ def showAreaTables(table_id):
     area = getTableAreaController(table_id)['data']
     result = viewTablesToJoinController(area[0])
     print("Las mesas disponibles en el área son: ")
+    print(result)
     for i in result['data']:
         print(str(i[0]))
 
 def joinTable(table_id):
     clear()
     isOpenBill = tableHasOpenBill(table_id)
-    print(isOpenBill)
-    if isOpenBill:
+    if not isOpenBill:
         showAreaTables(table_id)
         table2 = int(input("Ingrese el número de la mesa que desea unir: "))
         createCountController(table2)
@@ -374,8 +377,11 @@ def viewOrders(table_id):
     print(count_id)
     if count_id: 
         viewBill(count_id)  
+        print("Mostrando cuenta de la mesa. Presione cualquier tecla para continuar")
+        msvcrt.getch()
     else:
-        print("No se encontró una cuenta asociada con el ID de la mesa proporcionado.")
+        print("No se encontró una cuenta asociada con el ID de la mesa proporcionado. Presione cualquier tecla para continuar")
+        msvcrt.getch()
 
 def viewReports():
     clear()

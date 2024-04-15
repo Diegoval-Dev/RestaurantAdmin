@@ -19,7 +19,7 @@ def serviceCreateNewCount(tableid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("insert into cuenta(mesaid, is_open) values (%s, false)", [tableid])
+            cursor.execute("insert into cuenta(mesaid, is_open) values (%s, true)", [tableid])
             conn.commit()
             return {"success": True}
     except Exception as e:
