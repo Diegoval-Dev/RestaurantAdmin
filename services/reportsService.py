@@ -13,7 +13,7 @@ def ServiceFoodMoreOrders(fecha_ini, fecha_fin):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT p.platoid, p.name AS nombre_plato, SUM(cp.cantidad) AS total_pedidos FROM cuenta_plato cp JOIN plato p ON cp.platoid = p.platoid WHERE cp.fecha >= %s and cp.fecha <= %s GROUP BY p.platoid, p.name ORDER BY total_pedidos DESC", (fecha_ini, fecha_fin, fecha_ini, fecha_fin))
+            cursor.execute(" SELECT fecha, COUNT(*) AS cantidad_pedidos FROM ( SELECT fecha FROM cuenta_bebidas WHERE fecha BETWEEN %s AND %s UNION ALL SELECT fecha FROM cuenta_plato WHERE fecha BETWEEN %s AND %s ) AS Pedidos GROUP BY fecha ORDER BY  cantidad_pedidos DESC" , (fecha_ini, fecha_fin, fecha_ini, fecha_fin))
             result = cursor.fetchall()
             return {"success": True, "message": "Reporte de platos más pedidos exitosamente", "data" : result}
     except Exception as e:
@@ -23,15 +23,13 @@ def ServiceFoodMoreOrders(fecha_ini, fecha_fin):
         
 
 
-
-
 def ServiceAverageOrderTime(fecha_ini, fecha_fin):
     conn = get_connection()
     if conn is None:
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("", (fecha_ini, fecha_fin, fecha_ini, fecha_fin))
+            cursor.execute("SELECT p.platoid, p.name AS nombre_plato, SUM(cp.cantidad) AS total_pedidos FROM cuenta_plato cp JOIN plato p ON cp.platoid = p.platoid WHERE cp.fecha >= %s and cp.fecha <= %s GROUP BY p.platoid, p.name ORDER BY total_pedidos DESC", (fecha_ini, fecha_fin))
             result = cursor.fetchall()
             return {"success": True, "message": "Horario en el que se ingresan más pedidos", "data": result}
     except Exception as e:
@@ -40,6 +38,7 @@ def ServiceAverageOrderTime(fecha_ini, fecha_fin):
         conn.close()
 
 
+from db.connection import get_connection
 
 def ServiceAverageMealTime(fecha_ini, fecha_fin):
     conn = get_connection()
@@ -47,13 +46,19 @@ def ServiceAverageMealTime(fecha_ini, fecha_fin):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT CONCAT(personas_comiendo, ' personas: ', FLOOR(promedio_tiempo_comida / 60), ' horas ', promedio_tiempo_comida % 60, ' minutos') AS resultado FROM (SELECT ROUND(AVG(duracion_comer)) AS promedio_tiempo_comida, m.capacidad AS personas_comiendo FROM cuenta_plato AS cp JOIN cuenta AS c ON cp.cuentaid = c.cuentaid JOIN mesa AS m ON c.mesaid = m.mesaid JOIN ( SELECT c.mesaid, COUNT(*) AS num_registros, SUM(cp.duracion_comer) AS suma_tiempo_comida FROM cuenta_plato AS cp JOIN cuenta AS c ON cp.cuentaid = c.cuentaid WHERE cp.fecha BETWEEN '2024-03-01' AND '2024-04-10'GROUP BY c.mesaid ) AS tiempos ON c.mesaid = tiempos.mesaid GROUP BY m.capacidad ) AS subconsulta;", (fecha_ini, fecha_fin, fecha_ini, fecha_fin))
+            cursor.execute("SELECT m.capacidad AS personas_comiendo, CONCAT( FLOOR(AVG(cp.duracion_comer) / 60), ' horas ', MOD(ROUND(AVG(cp.duracion_comer)), 60), ' minutos') AS promedio_tiempo_comida from cuenta_plato AS cp JOIN cuenta AS c ON cp.cuentaid = c.cuentaid JOIN mesa AS m ON c.mesaid = m.mesaid where cp.fecha BETWEEN %s AND %s GROUP BY m.capacidad", (fecha_ini, fecha_fin))
             result = cursor.fetchall()
-            return {"success": True, "message": "Tiempo de comida del usuario",  "data": result}
+            return {"success": True, "message": "Tiempo de comida del usuario", "data": result}
     except Exception as e:
         return {"success": False, "error": "Error al obtener los datos de tiempo en comer los clientes: " + str(e)}
     finally:
         conn.close()
+
+
+
+
+
+
 
 def serviceComplaintByClient(date1, date2):
     conn = get_connection()

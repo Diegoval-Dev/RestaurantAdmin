@@ -8,7 +8,8 @@ from controllers.tableController import createTableController, viewTablesControl
 from controllers.waiterController import createNewWaiter
 from controllers.foodController import viewFoodMenuController, addProductToBillController
 from controllers.CountController import createCountController, viewCountController, getCountID
-from controllers.reportsController import *
+from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController
+from controllers.fectutaController import ClienteController
 
 logeado = False
 
@@ -91,6 +92,31 @@ def tableBill(table_id):
         if opcion == "2":
             pass
 
+
+
+def bill_Print(count_id):
+    clear()
+    print("Factura")
+
+    direccion = input("Ingrese la dirección del cliente: ")
+    nombre = input("Ingrese el nombre del cliente: ")
+    nit = input("Ingrese el NIT del cliente: ")
+
+    # Imprimir los detalles del cliente
+    print("Detalles del Cliente:")
+    print(f"Dirección: {direccion}")
+    print(f"Nombre: {nombre}")
+    print(f"NIT: {nit}")
+    print()
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+
+
+    
+    
 def selectTable():
     clear()
     print("Seleccione una mesa")
@@ -99,13 +125,17 @@ def selectTable():
     print("Que desea hacer?")
     print("1. Abrir cuenta en mesa")
     print("2. Juntar mesa")
-    print("3. Salir")
+    print("3. Imprimir factura")
+    print("4. Salir")
     opcion = input("Ingrese la opción deseada: ")
     if opcion == "1":
         tableBill(table_id)
     if opcion == "2":
         pass
     if opcion == "3":
+       count_id = input("Ingrese el ID de la cuenta para imprimir la factura: ")
+    bill_Print(count_id)
+    if opcion == "4":
         pass
     else:
         print("Opción no válida")
@@ -322,6 +352,70 @@ def viewReports():
         print("Opción no válida")
 
 
+
+
+def ServiceFoodMoreOrders():
+    clear()
+    print("Platos más pedidos")
+    fecha_ini = input("Ingrese la fecha inicial (YYYY-MM-DD): ")
+    fecha_fin = input("Ingrese la fecha final (YYYY-MM-DD): ")
+
+    result = ServiceFoodMoreOrdersController(fecha_ini, fecha_fin)
+
+    if result["success"]:
+        print("Fecha\t\tCantidad de pedidos")
+        for row in result["data"]:
+            print(f"{row[0]}\t{row[1]}")
+    else:
+        print("Error:", result["error"])
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+def ServiceAverageOrderTime():
+    clear()
+    print("Horario con más ingresos")
+    fecha_ini = input("Ingrese la fecha inicial (YYYY-MM-DD): ")
+    fecha_fin = input("Ingrese la fecha final (YYYY-MM-DD): ")
+
+    result = ServiceAverageOrderTimeController(fecha_ini, fecha_fin)
+
+    if result["success"]:
+        print("Plato ID\tNombre del Plato\tTotal de Pedidos")
+        for row in result["data"]:
+            print(f"{row[0]}\t\t{row[1]}\t\t{row[2]}")
+    else:
+        print("Error:", result["error"])
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+
+
+def ServiceAverageMealTime():
+    clear()
+    print("Horario con más ingresos")
+    fecha_ini = input("Ingrese la fecha inicial (YYYY-MM-DD): ")
+    fecha_fin = input("Ingrese la fecha final (YYYY-MM-DD): ")
+
+    result = ServiceAverageMealTimeController(fecha_ini, fecha_fin)
+
+    if result["success"]:
+        print("Promedio de Comer")
+        print("Personas \t Tiempo Promedio")
+        for row in result["data"]:
+            print(f"{row[0]} \t\t {row[1]}")
+    else:
+        print("Error:", result["error"])
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+
+
 def dashboard(rol):
     global logeado
     while logeado:
@@ -334,8 +428,10 @@ def dashboard(rol):
             print("3. Crear Mesa")
             print("4. Ver Mesas")
             print("5. Crear usuarios")
-            print("6. Ver reportes")
-            print("7. Salir")
+            print("6. Platos más pedidos")
+            print("7. Horario con más pedidos")
+            print("8. Duración de comida")
+            print("12. Salir")
             opcion = input("Ingrese la opción deseada: ")
 
             if opcion == "1":
@@ -349,8 +445,12 @@ def dashboard(rol):
             if opcion == "5":
                 createUsers()
             if opcion == "6":
-                viewReports()
+                ServiceFoodMoreOrders()
             if opcion == "7":
+                ServiceAverageOrderTime()
+            if opcion == "8":
+                ServiceAverageMealTime()
+            if opcion == "12":
                 logeado = False
                 start()
             else:
