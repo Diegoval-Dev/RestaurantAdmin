@@ -36,7 +36,7 @@ def serviceViewCount(countid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT cp.platoid AS ID, p.name AS Nombre, cp.cantidad AS Cantidad, p.price AS Precio, cp.cantidad * p.price AS Total FROM cuenta_plato cp JOIN plato p ON cp.platoid = p.platoid WHERE cp.cuentaid = %s", (countid))
+            cursor.execute("SELECT cp.platoid AS ID, p.name AS Nombre, cp.cantidad AS Cantidad, p.price AS Precio, cp.cantidad * p.price AS Total FROM cuenta_plato cp JOIN plato p ON cp.platoid = p.platoid WHERE cp.cuentaid = %s", [countid])
             result = cursor.fetchall()
             return {"success": True, "data": result}
     except Exception as e:
@@ -61,7 +61,7 @@ def serviceGetCountID(tableid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
+            cursor.execute("select cuentaid from cuenta where mesaid = %s", (tableid))
             result = cursor.fetchone()
             return {"success": True, "data": result}
     except Exception as e:

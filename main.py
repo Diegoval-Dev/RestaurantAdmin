@@ -51,7 +51,8 @@ def viewBill(countid):
     print("Cuenta de la mesa", countid)
     print("ID\tNombre\tCantidad\tPrecio\tTotal")
     result = viewCountController(countid)
-    #Aqui se imprimen los productos de la cuenta
+    for i in result['data']:
+        print(str(i[0]) + " " +  str(i[1]) + " " + str(i[2]) + " " + str(i[3]) + " " + str(i[4]))
     print("Presione cualquier tecla para continuar...")
     msvcrt.getch()
 
@@ -274,7 +275,7 @@ def takeOrder(table_id):
     addProductToBill(table_id) 
 
 def viewOrders(table_id):
-    count_id = getCountID(table_id)
+    count_id = getCountID(table_id)[0]
     viewBill(count_id)
 
 def dashboard(rol):
