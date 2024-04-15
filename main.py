@@ -8,6 +8,7 @@ from controllers.tableController import createTableController, viewTablesControl
 from controllers.waiterController import createNewWaiter
 from controllers.foodController import viewFoodMenuController, addProductToBillController
 from controllers.CountController import createCountController, viewCountController, getCountID
+from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController
 
 logeado = False
 
@@ -282,6 +283,70 @@ def viewOrders(table_id):
         print("No se encontró una cuenta asociada con el ID de la mesa proporcionado.")
 
 
+
+
+def ServiceFoodMoreOrders():
+    clear()
+    print("Platos más pedidos")
+    fecha_ini = input("Ingrese la fecha inicial (YYYY-MM-DD): ")
+    fecha_fin = input("Ingrese la fecha final (YYYY-MM-DD): ")
+
+    result = ServiceFoodMoreOrdersController(fecha_ini, fecha_fin)
+
+    if result["success"]:
+        print("Fecha\t\tCantidad de pedidos")
+        for row in result["data"]:
+            print(f"{row[0]}\t{row[1]}")
+    else:
+        print("Error:", result["error"])
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+def ServiceAverageOrderTime():
+    clear()
+    print("Horario con más ingresos")
+    fecha_ini = input("Ingrese la fecha inicial (YYYY-MM-DD): ")
+    fecha_fin = input("Ingrese la fecha final (YYYY-MM-DD): ")
+
+    result = ServiceAverageOrderTimeController(fecha_ini, fecha_fin)
+
+    if result["success"]:
+        print("Plato ID\tNombre del Plato\tTotal de Pedidos")
+        for row in result["data"]:
+            print(f"{row[0]}\t\t{row[1]}\t\t{row[2]}")
+    else:
+        print("Error:", result["error"])
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+
+
+def ServiceAverageMealTime():
+    clear()
+    print("Horario con más ingresos")
+    fecha_ini = input("Ingrese la fecha inicial (YYYY-MM-DD): ")
+    fecha_fin = input("Ingrese la fecha final (YYYY-MM-DD): ")
+
+    result = ServiceAverageMealTimeController(fecha_ini, fecha_fin)
+
+    if result["success"]:
+        print("Promedio de Comer")
+        print("Personas \t Tiempo Promedio")
+        for row in result["data"]:
+            print(f"{row[0]} \t\t {row[1]}")
+    else:
+        print("Error:", result["error"])
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+
+
 def dashboard(rol):
     global logeado
     while logeado:
@@ -294,7 +359,10 @@ def dashboard(rol):
             print("3. Crear Mesa")
             print("4. Ver Mesas")
             print("5. Crear usuarios")
-            print("6. Salir")
+            print("6. Platos más pedidos")
+            print("7. Horario con más pedidos")
+            print("8. Duración de comida")
+            print("12. Salir")
             opcion = input("Ingrese la opción deseada: ")
 
             if opcion == "1":
@@ -308,6 +376,12 @@ def dashboard(rol):
             if opcion == "5":
                 createUsers()
             if opcion == "6":
+                ServiceFoodMoreOrders()
+            if opcion == "7":
+                ServiceAverageOrderTime()
+            if opcion == "8":
+                ServiceAverageMealTime()
+            if opcion == "12":
                 logeado = False
                 start()
             else:

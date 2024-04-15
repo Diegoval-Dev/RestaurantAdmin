@@ -11,32 +11,33 @@ def ServiceFoodMoreOrdersController(fecha_ini, fecha_fin):
     try:
         result = ServiceFoodMoreOrders(fecha_ini, fecha_fin)
         if result["success"]:
-            return {"success": True, "message": "Reporte de platos más pedidos exitosamente."}
+            return {"success": True, "message": "Reporte de platos más pedidos exitosamente.", "data": result["data"]}
         else:
             return {"success": False, "error": result["error"]}
     except Exception as e:
         return {"success": False, "error": "Error al ejecutar la consulta: " + str(e)}
-
 
 def ServiceAverageOrderTimeController(fecha_ini, fecha_fin):
     try:
         result = ServiceAverageOrderTime(fecha_ini, fecha_fin)
         if result["success"]:
-            return {"success": True, "message": "Horario en el que se ingresan más pedidos exitosamente."}
+            return {"success": True, "message": "Horario en el que se ingresan más pedidos exitosamente.", "data": result["data"]}
         else:
             return {"success": False, "error": result["error"]}
     except Exception as e:
         return {"success": False, "error": "Error al ejecutar la consulta: " + str(e)}
 
-def ServiceAverageMealTimeController(parametros):
+
+def ServiceAverageMealTimeController(fecha_ini, fecha_fin):
     try:
-        result = ServiceAverageMealTime(parametros)
+        result = ServiceAverageMealTime(fecha_ini, fecha_fin)
         if result["success"]:
-            return {"success": True, "message": "Tiempo de comida del usuario"}
+            return {"success": True, "message": "Tiempo de comida del usuario", "data": result["data"]}
         else:
             return {"success": False, "error": result["error"]}
     except Exception as e:
         return {"success": False, "error": "Error al ejecutar la consulta: " + str(e)}
+
 
 
 def getComplaintByClientController(date1, date2):
@@ -68,7 +69,4 @@ def getWaiterEfficiencyController():
             return {"success": False, "error": result["error"]}
     except Exception as e:
         return {"success": False, "error": "Error en la solicitud: " + str(e)}
-
-
-
 
