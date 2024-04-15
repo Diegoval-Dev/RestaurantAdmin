@@ -355,14 +355,11 @@ def start():
     clear()
     print("Bienvenido al sistema")
     print("1. Iniciar sesión")
-    print("2. Registrarse")
     print("3. Salir")
     inicio = input("Ingrese la opción deseada: ")
     if inicio == "1":
         login()
     elif inicio == "2":
-        signin()
-    elif inicio == "3":
         exit()
     else:
         print("Opción no válida")
@@ -382,45 +379,6 @@ def viewOrders(table_id):
     else:
         print("No se encontró una cuenta asociada con el ID de la mesa proporcionado. Presione cualquier tecla para continuar")
         msvcrt.getch()
-
-def viewReports():
-    clear()
-    print("Sistema de reportes")
-    print("1. Reporte 1")
-    print("2. Reporte 2")
-    print("3. Reporte 3")
-    print("4. Reporte de quejas agrupadas por persona")
-    print("5. Reporte de quejas agrupadas por plato")
-    print("6. Reporte de eficiencia de meseros")
-    print("7. Salir")
-    opcion = input("Ingrese la opción deseada: ")
-
-    if opcion == "1":
-        createNewArea()
-    if opcion == "2":
-        viewAreas()
-    if opcion == "3":
-        createNewTable() 
-    if opcion == "4":
-        date1 = int(input("Ingrese la primera fecha."))
-        date2 = int(input("Ingrese la segunda fecha."))
-        result = getComplaintByClientController(date1, date2)
-        data = result['data']
-        print(data)
-    if opcion == "5":
-        date1 = int(input("Ingrese la primera fecha."))
-        date2 = int(input("Ingrese la segunda fecha."))
-        result = getComplaintByPlateController(date1, date2)
-        data = result['data']
-        print(data)
-    if opcion == "6":
-        result = getWaiterEfficiencyController()
-        data = result['data']
-        print(data)
-    if opcion == "7":
-        return None
-    else:
-        print("Opción no válida")
 
 
 
@@ -502,6 +460,9 @@ def dashboard(rol):
             print("6. Platos más pedidos")
             print("7. Horario con más pedidos")
             print("8. Duración de comida")
+            print("9. Reporte de quejas agrupadas por persona")
+            print("10. Reporte de quejas agrupadas por plato")
+            print("11. Reporte de eficiencia de meseros")
             print("12. Salir")
             opcion = input("Ingrese la opción deseada: ")
 
@@ -521,6 +482,27 @@ def dashboard(rol):
                 ServiceAverageOrderTime()
             if opcion == "8":
                 ServiceAverageMealTime()
+            if opcion == "9":
+                date1 = input("Ingrese la primera fecha (YYYY-MM-DD): ")
+                date2 = input("Ingrese la segunda fecha (YYYY-MM-DD): ")
+                print("aversi entra")
+                result = getComplaintByClientController(date1, date2)
+                print(result)
+                data = result['data']
+                print(data)
+            if opcion == "10":
+                date1 = int(input("Ingrese la primera fecha."))
+                date2 = int(input("Ingrese la segunda fecha."))
+                result = getComplaintByPlateController(date1, date2)
+                data = result['data']
+                print(data)
+            if opcion == "11":
+                result = getWaiterEfficiencyController()
+                data = result['data']
+                print(data)                
+                
+                
+                
             if opcion == "12":
                 logeado = False
                 start()

@@ -43,6 +43,7 @@ def ServiceAverageMealTimeController(fecha_ini, fecha_fin):
 def getComplaintByClientController(date1, date2):
     try:
         result = serviceComplaintByClient(date1, date2)
+        print(result)
         if result["success"]:
             return {"success": True, "data": result["data"]}
         else:
