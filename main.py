@@ -9,7 +9,7 @@ from controllers.tableController import createTableController, viewTablesControl
 from controllers.waiterController import createNewWaiter
 from controllers.foodController import viewFoodMenuController, addProductToBillController
 from controllers.CountController import createCountController, viewCountController, getCountID
-from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController
+from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController, getComplaintByClientController, getComplaintByPlateController, getWaiterEfficiencyController
 from controllers.fectutaController import ClienteController
 from controllers.chefController import viewPlatesOrdenController
 from controllers.bartenderController import viewDrinksOrdenController
@@ -128,17 +128,30 @@ def tableBill(table_id):
 
 def bill_Print(count_id):
     clear()
+    result = viewCountController(count_id)
+
+    total = 0
+    for i in result['data']:
+        total += int(i[4])
+
     print("Factura")
 
     direccion = input("Ingrese la dirección del cliente: ")
     nombre = input("Ingrese el nombre del cliente: ")
     nit = input("Ingrese el NIT del cliente: ")
+    pay_method = input("Ingrese el método de pago que desea (tarjeta/efectivo): ")
+    payment = input("Ingrese la cantidad a pagar: ")
+    change = str(total - int(payment))
 
     # Imprimir los detalles del cliente
     print("Detalles del Cliente:")
     print(f"Dirección: {direccion}")
     print(f"Nombre: {nombre}")
     print(f"NIT: {nit}")
+    print(f"Método de pago: {pay_method}")
+    print(f"Total pagado: {payment}")
+    print(f"total: {total}")
+    print(f"Cambio: {change}")
     print()
 
     print("Presione cualquier tecla para continuar...")
@@ -361,7 +374,7 @@ def viewReports():
     if opcion == "2":
         viewAreas()
     if opcion == "3":
-        createNewTable()
+        createNewTable() 
     if opcion == "4":
         date1 = int(input("Ingrese la primera fecha."))
         date2 = int(input("Ingrese la segunda fecha."))
