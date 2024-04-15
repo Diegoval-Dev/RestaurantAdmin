@@ -9,6 +9,7 @@ from controllers.waiterController import createNewWaiter
 from controllers.foodController import viewFoodMenuController, addProductToBillController
 from controllers.CountController import createCountController, viewCountController, getCountID
 from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController
+from controllers.fectutaController import ClienteController
 
 logeado = False
 
@@ -91,6 +92,31 @@ def tableBill(table_id):
         if opcion == "2":
             pass
 
+
+
+def bill_Print(count_id):
+    clear()
+    print("Factura")
+
+    direccion = input("Ingrese la dirección del cliente: ")
+    nombre = input("Ingrese el nombre del cliente: ")
+    nit = input("Ingrese el NIT del cliente: ")
+
+    # Imprimir los detalles del cliente
+    print("Detalles del Cliente:")
+    print(f"Dirección: {direccion}")
+    print(f"Nombre: {nombre}")
+    print(f"NIT: {nit}")
+    print()
+
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+
+
+
+    
+    
 def selectTable():
     clear()
     print("Seleccione una mesa")
@@ -99,13 +125,17 @@ def selectTable():
     print("Que desea hacer?")
     print("1. Abrir cuenta en mesa")
     print("2. Juntar mesa")
-    print("3. Salir")
+    print("3. Imprimir factura")
+    print("4. Salir")
     opcion = input("Ingrese la opción deseada: ")
     if opcion == "1":
         tableBill(table_id)
     if opcion == "2":
         pass
     if opcion == "3":
+       count_id = input("Ingrese el ID de la cuenta para imprimir la factura: ")
+    bill_Print(count_id)
+    if opcion == "4":
         pass
     else:
         print("Opción no válida")
