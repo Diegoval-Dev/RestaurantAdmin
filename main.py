@@ -485,24 +485,42 @@ def dashboard(rol):
             if opcion == "9":
                 date1 = input("Ingrese la primera fecha (YYYY-MM-DD): ")
                 date2 = input("Ingrese la segunda fecha (YYYY-MM-DD): ")
-                print("aversi entra")
+                
                 result = getComplaintByClientController(date1, date2)
-                print(result)
-                data = result['data']
-                print(data)
+                
+                if result["success"]:
+                    print(result['data'])
+                    print("Presione cualquier tecla para continuar...")
+                    msvcrt.getch()
+                else:
+                    print(result["error"])
+                    print("Presione cualquier tecla para continuar...")
+                    msvcrt.getch()
+                
             if opcion == "10":
-                date1 = int(input("Ingrese la primera fecha."))
-                date2 = int(input("Ingrese la segunda fecha."))
+                date1 = input("Ingrese la primera fecha.")
+                date2 = input("Ingrese la segunda fecha.")
                 result = getComplaintByPlateController(date1, date2)
-                data = result['data']
-                print(data)
+                
+                if result["success"]:
+                    print(result['data'])
+                    print("Presione cualquier tecla para continuar...")
+                    msvcrt.getch()
+                else:
+                    print(result["error"])
+                    print("Presione cualquier tecla para continuar...")
+                    msvcrt.getch()
             if opcion == "11":
                 result = getWaiterEfficiencyController()
-                data = result['data']
-                print(data)                
                 
-                
-                
+                if result["success"]:
+                    print(result['data'])
+                    print("Presione cualquier tecla para continuar...")
+                    msvcrt.getch()
+                else:
+                    print(result["error"])
+                    print("Presione cualquier tecla para continuar...")
+                    msvcrt.getch()      
             if opcion == "12":
                 logeado = False
                 start()
