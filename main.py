@@ -508,9 +508,21 @@ def dashboard(rol):
             else:
                 print("Opción no válida")
         if rol == "chef":
-            viewPlatesOrden()
+            print("1. Ver platos ordenados")
+            print("2. Salir")
+            if opcion == "1":
+                viewPlatesOrden()
+            if opcion == "2":
+                logeado = False
+                start()
         if rol == "bartender":
-            viewDrinksOrden()
+            print("1. Ver bebidas ordenadas")
+            print("2. Salir")
+            if opcion == "1":
+                viewDrinksOrden()
+            if opcion == "2":
+                logeado = False
+                start()
         else:
             print("Opción no válida")
 
