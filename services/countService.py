@@ -54,11 +54,7 @@ def serviceGetCountID(tableid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-<<<<<<< HEAD
-            cursor.execute("select cuentaid from cuenta where mesaid = %s", (tableid))
-=======
-            cursor.execute("select mesaid from mesa")
->>>>>>> 7f626cc161caff398c6ece1e51cae869b351e992
+            cursor.execute("SELECT cuentaid FROM cuenta WHERE mesaid = %s", [tableid])
             result = cursor.fetchone()
             return {"success": True, "data": result}
     except Exception as e:

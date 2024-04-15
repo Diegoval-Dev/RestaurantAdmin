@@ -275,8 +275,12 @@ def takeOrder(table_id):
     addProductToBill(table_id) 
 
 def viewOrders(table_id):
-    count_id = getCountID(table_id)[0]
-    viewBill(count_id)
+    count_id = getCountID(table_id)  
+    if count_id: 
+        viewBill(count_id)  
+    else:
+        print("No se encontró una cuenta asociada con el ID de la mesa proporcionado.")
+
 
 def dashboard(rol):
     global logeado
