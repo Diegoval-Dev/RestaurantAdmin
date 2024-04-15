@@ -1,6 +1,7 @@
 import getpass
 import os
 import msvcrt
+from datetime import datetime
 
 from controllers.loginController import registerController, loginController, getId
 from controllers.areaController import createAreaController, viewAreasController
@@ -10,8 +11,38 @@ from controllers.foodController import viewFoodMenuController, addProductToBillC
 from controllers.CountController import createCountController, viewCountController, getCountID
 from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController
 from controllers.fectutaController import ClienteController
+from controllers.chefController import viewPlatesOrdenController
+from controllers.bartenderController import viewDrinksOrdenController
 
 logeado = False
+
+def viewDrinksOrden():
+    clear()
+    print("Bebidas ordenadas")
+    result = viewDrinksOrdenController()
+    if result['success']:
+        print("ID\tNombre\tCantidad\tFecha")
+        for drink in result['data']:
+            formatted_date = datetime.strptime(drink[3], "%Y-%m-%d").strftime("%d %b %Y")
+            print(f"{drink[0]}\t{drink[1]}\t{drink[2]}\t{formatted_date}")
+    else:
+        print("Error:", result['error'])
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+def viewPlatesOrden():
+    clear()
+    print("Platos ordenados")
+    result = viewPlatesOrdenController()
+    if result['success']:
+        print("ID\tNombre\tCantidad\tFecha")
+        for plate in result['data']:
+            formatted_date = datetime.strptime(plate[3], "%Y-%m-%d").strftime("%d %b %Y")
+            print(f"{plate[0]}\t{plate[1]}\t{plate[2]}\t{formatted_date}")
+    else:
+        print("Error:", result['error'])
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
 
 def addFoodMenu(count_id):
     clear()
@@ -27,6 +58,7 @@ def addFoodMenu(count_id):
     print("Cantidad: ")
     quantity = input("Ingrese la cantidad: ")
     result = addProductToBillController(id, quantity, count_id)
+    print(result)
     if result["success"]:
         print("Producto agregado con éxito. Presione cualquier tecla para continuar")
         msvcrt.getch()
@@ -437,9 +469,9 @@ def dashboard(rol):
             else:
                 print("Opción no válida")
         if rol == "chef":
-            pass
+            viewPlatesOrden()
         if rol == "bartender":
-            pass
+            viewDrinksOrden()
         else:
             print("Opción no válida")
 
