@@ -45,6 +45,6 @@ def addProductToBillController(id, quantity, count_id):
         if result["success"]:
             return {"success": True, "data": result}
         else:
-            return []
+            return {"success": False, "error": result["error"]}
     except Exception as e:
         return []

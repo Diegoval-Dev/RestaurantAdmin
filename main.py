@@ -1,6 +1,7 @@
 import getpass
 import os
 import msvcrt
+from datetime import datetime
 
 from controllers.loginController import registerController, loginController, getId
 from controllers.areaController import createAreaController, viewAreasController
@@ -10,8 +11,38 @@ from controllers.foodController import viewFoodMenuController, addProductToBillC
 from controllers.CountController import *
 from controllers.reportsController import *
 from controllers.fectutaController import ClienteController
+from controllers.chefController import viewPlatesOrdenController
+from controllers.bartenderController import viewDrinksOrdenController
 
 logeado = False
+
+def viewDrinksOrden():
+    clear()
+    print("Bebidas ordenadas")
+    result = viewDrinksOrdenController()
+    if result['success']:
+        print("ID\tNombre\tCantidad\tFecha")
+        for drink in result['data']:
+            formatted_date = datetime.strptime(drink[3], "%Y-%m-%d").strftime("%d %b %Y")
+            print(f"{drink[0]}\t{drink[1]}\t{drink[2]}\t{formatted_date}")
+    else:
+        print("Error:", result['error'])
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
+
+def viewPlatesOrden():
+    clear()
+    print("Platos ordenados")
+    result = viewPlatesOrdenController()
+    if result['success']:
+        print("ID\tNombre\tCantidad\tFecha")
+        for plate in result['data']:
+            formatted_date = datetime.strptime(plate[3], "%Y-%m-%d").strftime("%d %b %Y")
+            print(f"{plate[0]}\t{plate[1]}\t{plate[2]}\t{formatted_date}")
+    else:
+        print("Error:", result['error'])
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch()
 
 def addFoodMenu(count_id):
     clear()
@@ -27,6 +58,7 @@ def addFoodMenu(count_id):
     print("Cantidad: ")
     quantity = input("Ingrese la cantidad: ")
     result = addProductToBillController(id, quantity, count_id)
+    print(result)
     if result["success"]:
         print("Producto agregado con éxito. Presione cualquier tecla para continuar")
         msvcrt.getch()
@@ -121,7 +153,6 @@ def bill_Print(count_id):
     for i in result['data']:
         total += int(i[4])
 
-
     print("Factura")
 
     direccion = input("Ingrese la dirección del cliente: ")
@@ -138,6 +169,7 @@ def bill_Print(count_id):
     print(f"NIT: {nit}")
     print(f"Método de pago: {pay_method}")
     print(f"Total pagado: {payment}")
+    print(f"total: {total}")
     print(f"Cambio: {change}")
     print()
 
@@ -362,7 +394,7 @@ def viewReports():
     if opcion == "2":
         viewAreas()
     if opcion == "3":
-        createNewTable()
+        createNewTable() 
     if opcion == "4":
         date1 = int(input("Ingrese la primera fecha."))
         date2 = int(input("Ingrese la segunda fecha."))
@@ -509,9 +541,21 @@ def dashboard(rol):
             else:
                 print("Opción no válida")
         if rol == "chef":
-            pass
+            print("1. Ver platos ordenados")
+            print("2. Salir")
+            if opcion == "1":
+                viewPlatesOrden()
+            if opcion == "2":
+                logeado = False
+                start()
         if rol == "bartender":
-            pass
+            print("1. Ver bebidas ordenadas")
+            print("2. Salir")
+            if opcion == "1":
+                viewDrinksOrden()
+            if opcion == "2":
+                logeado = False
+                start()
         else:
             print("Opción no válida")
 
