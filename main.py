@@ -4,11 +4,11 @@ import msvcrt
 
 from controllers.loginController import registerController, loginController, getId
 from controllers.areaController import createAreaController, viewAreasController
-from controllers.tableController import createTableController, viewTablesController, tableHasOpenBill
+from controllers.tableController import *
 from controllers.waiterController import createNewWaiter
 from controllers.foodController import viewFoodMenuController, addProductToBillController
-from controllers.CountController import createCountController, viewCountController, getCountID
-from controllers.reportsController import ServiceFoodMoreOrdersController, ServiceAverageOrderTimeController, ServiceAverageMealTimeController
+from controllers.CountController import *
+from controllers.reportsController import *
 from controllers.fectutaController import ClienteController
 
 logeado = False
@@ -92,21 +92,53 @@ def tableBill(table_id):
         if opcion == "2":
             pass
 
+def showAreaTables(table_id):
+    area = getTableAreaController(table_id)['data']
+    result = viewTablesToJoinController(area[0])
+    print("Las mesas disponibles en el área son: ")
+    for i in result['data']:
+        print(str(i[0]))
 
+def joinTable(table_id):
+    clear()
+    isOpenBill = tableHasOpenBill(table_id)
+    print(isOpenBill)
+    if isOpenBill:
+        showAreaTables(table_id)
+        table2 = int(input("Ingrese el número de la mesa que desea unir: "))
+        createCountController(table2)
+        print("Se han unido las mesas y se ha abierto una cuenta para ambas mesas. Presione cualquier tecla para continuar")
+        msvcrt.getch()
+    else:
+        print("No se pueden juntar mesas ya que la mesa cuenta con una cuenta abierta. Presione cualquier tecla para continuar")
+        msvcrt.getch()
 
 def bill_Print(count_id):
     clear()
+    result = viewCountController(count_id)
+
+    total = 0
+    for i in result['data']:
+        total += int(i[4])
+
+
     print("Factura")
 
     direccion = input("Ingrese la dirección del cliente: ")
     nombre = input("Ingrese el nombre del cliente: ")
     nit = input("Ingrese el NIT del cliente: ")
+    pay_method = input("Ingrese el método de pago que desea (tarjeta/efectivo): ")
+    payment = input("Ingrese la cantidad a pagar: ")
+    change = str(total - int(payment))
 
     # Imprimir los detalles del cliente
     print("Detalles del Cliente:")
     print(f"Dirección: {direccion}")
     print(f"Nombre: {nombre}")
     print(f"NIT: {nit}")
+    print(f"Método de pago: {pay_method}")
+    print(f"Total pagado: {payment}")
+    print(f"Cambio: {change}")
     print()
 
     print("Presione cualquier tecla para continuar...")
@@ -131,10 +163,10 @@ def selectTable():
     if opcion == "1":
         tableBill(table_id)
     if opcion == "2":
-        pass
+        joinTable(table_id)
     if opcion == "3":
-       count_id = input("Ingrese el ID de la cuenta para imprimir la factura: ")
-    bill_Print(count_id)
+        count_id = input("Ingrese el ID de la cuenta para imprimir la factura: ")
+        bill_Print(count_id)
     if opcion == "4":
         pass
     else:
@@ -306,7 +338,8 @@ def takeOrder(table_id):
     addProductToBill(table_id) 
 
 def viewOrders(table_id):
-    count_id = getCountID(table_id)  
+    count_id = getCountID(table_id) 
+    print(count_id)
     if count_id: 
         viewBill(count_id)  
     else:

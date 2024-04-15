@@ -19,7 +19,21 @@ def serviceCreateNewCount(tableid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
+            cursor.execute("insert into cuenta(mesaid, is_open) values (%s, false)", [tableid])
+            conn.commit()
+            return {"success": True}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+
+def serviceCloseCount(countid):
+    conn = get_connection()
+    if conn is None:
+        return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("update cuenta set is_open = false where countid = %s", [countid])
             conn.commit()
             return {"success": True}
     except Exception as e:

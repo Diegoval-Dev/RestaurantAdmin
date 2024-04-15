@@ -5,7 +5,7 @@ script_location = Path(__file__).absolute()
 project_root = script_location.parent.parent
 sys.path.append(str(project_root))
 
-from services.tableService import serviceCreateNewTable, serviceViewTables, serviceBillOpen
+from services.tableService import *
 
 def createTableController(area_id, capacity, moveable):
     try:
@@ -20,6 +20,26 @@ def createTableController(area_id, capacity, moveable):
 def viewTablesController():
     try:
         result = serviceViewTables()
+        if result["success"]:
+            return {"success": True, "data": result["data"]}
+        else:
+            return {"success": False, "error": result["error"]}
+    except Exception as e:
+        return {"success": False, "error": "Error al procesar la solicitud de registro." + str(e)}
+
+def getTableAreaController(tableid):
+    try:
+        result = serviceGetTableArea(tableid)
+        if result["success"]:
+            return {"success": True, "data": result["data"]}
+        else:
+            return {"success": False, "error": result["error"]}
+    except Exception as e:
+        return {"success": False, "error": "Error al procesar la solicitud de registro." + str(e)}
+
+def viewTablesToJoinController(areaid):
+    try:
+        result = serviceViewTablesToJoin(areaid)
         if result["success"]:
             return {"success": True, "data": result["data"]}
         else:

@@ -35,6 +35,35 @@ def serviceViewTables():
     finally:
         conn.close()
 
+def serviceViewTables():
+    conn = get_connection()
+    if conn is None:
+        return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM mesa")
+            result = cursor.fetchall()
+            return {"success": True, "data": result}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+
+def serviceGetTableArea(mesaid):
+    conn = get_connection()
+    if conn is None:
+        return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT areaid FROM mesa WHERE mesaid = %s", [mesaid])
+            queryResult = cursor.fetchall()
+            result = queryResult[0]
+            return {"success": True, "data": result}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+
 """
 Esta funcion recine el id de una mesa y retorna si tiene una cuenta abierta o no
 recibe: id de la mesa
@@ -45,15 +74,30 @@ Devuelve:   {"success": True, "data": True} si la mesa tiene una cuenta abierta
 def serviceBillOpen(tableid):
     conn = get_connection()
     if conn is None:
+        print("error de conexion")
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
-            result = cursor.fetchone()
+            cursor.execute("SELECT is_open FROM cuenta WHERE mesaid = %s", [tableid])
+            queryResult = cursor.fetchone()
+            result = queryResult[0]
+            return {"success": True, "data": result}
+    except Exception as e:
+        print("exception: " + str(e))
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+
+def serviceViewTablesToJoin(areaid):
+    conn = get_connection()
+    if conn is None:
+        return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("select mesa.mesaid from mesa join cuenta on mesa.mesaid = cuenta.mesaid where areaid = %s and moveable = 'true' and is_open = true and cuenta.mesaid != %s", [areaid, areaid])
+            result = cursor.fetchall()
             return {"success": True, "data": result}
     except Exception as e:
         return {"success": False, "error": str(e)}
     finally:
         conn.close()
-
-

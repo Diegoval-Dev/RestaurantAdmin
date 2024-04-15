@@ -4,12 +4,22 @@ script_location = Path(__file__).absolute()
 project_root = script_location.parent.parent
 sys.path.append(str(project_root))
 
-from services.countService import serviceCreateNewCount, serviceViewCount, serviceGetCountID
+from services.countService import *
 
 
 def createCountController(tableid):
     try:
         result = serviceCreateNewCount(tableid)
+        if result["success"]:
+            return {"success": True, "message": "Cuenta abierta exitosamente."}
+        else:
+            return {"success": False, "error": result["error"]}
+    except Exception as e:
+        return {"success": False, "error": "Error al procesar la solicitud de registro." + str(e)}
+    
+def closeCountController(tableid):
+    try:
+        result = serviceCloseCount(tableid)
         if result["success"]:
             return {"success": True, "message": "Cuenta abierta exitosamente."}
         else:
