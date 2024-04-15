@@ -40,20 +40,21 @@ def serviceViewDrinkMenu():
     finally:
         conn.close()
         
+
         
+
+        
+
 def addProductToBill(id, quantity, count_id):
     conn = get_connection()
     if conn is None:
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("select * from cuenta_plato")
-            result = cursor.fetchall()
-            return {"success": True, "data": result}
+            cursor.execute("INSERT INTO cuenta_plato (platoid, cantidad, cuentaid) VALUES (%s, %s, %s)", (id, quantity, count_id))            
+            conn.commit()
+            return {"success": True, "message": "Datos insertados correctamente."}
     except Exception as e:
         return {"success": False, "error": str(e)}
     finally:
         conn.close()
-        
-        
-        

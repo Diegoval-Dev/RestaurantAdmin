@@ -34,6 +34,6 @@ esta funcion recibe el id de una mesa y devuelve el id de la cuenta que esta abi
 def getCountID(tableid):
     result = serviceGetCountID(tableid)
     if result["success"]:
-        return result["data"]
+        return result["data"][0]
     else:
         return None

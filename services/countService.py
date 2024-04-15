@@ -45,13 +45,6 @@ def serviceViewCount(countid):
         conn.close()
 
 
-
-
-
-
-
-
-
 """
 esta funcion recibe el id de una mesa y devuelve el id de la cuenta que esta abierta en esa mesa
 """
@@ -61,7 +54,7 @@ def serviceGetCountID(tableid):
         return {"success": False, "error": "No se pudo establecer conexión con la base de datos."}
     try:
         with conn.cursor() as cursor:
-            cursor.execute("Aqui adentro va el Query recuerden que los parametros van con %s, para eviatar SQL injection", ("aqui van los parametros"))
+            cursor.execute("select mesaid from mesa")
             result = cursor.fetchone()
             return {"success": True, "data": result}
     except Exception as e:
