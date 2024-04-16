@@ -15,9 +15,9 @@ def getDrinksBartender():
         with conn.cursor() as cursor:
             cursor.execute("""
                 SELECT cb.bebidaid, b.name, cb.cantidad, cb.fecha
-                FROM cuenta_bebida cb
+                FROM cuenta_bebidas cb
                 JOIN bebida b ON cb.bebidaid = b.bebidaid
-                ORDER BY cb.fecha ASC;
+                ORDER BY cb.fecha ASC
             """)
             drinks = cursor.fetchall()
             return {"success": True, "data": drinks}

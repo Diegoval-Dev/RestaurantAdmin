@@ -23,8 +23,7 @@ def viewDrinksOrden():
     if result['success']:
         print("ID\tNombre\tCantidad\tFecha")
         for drink in result['data']:
-            formatted_date = datetime.strptime(drink[3], "%Y-%m-%d").strftime("%d %b %Y")
-            print(f"{drink[0]}\t{drink[1]}\t{drink[2]}\t{formatted_date}")
+            print(f"{drink[0]}\t{drink[1]}\t{drink[2]}\t{drink[3]}")
     else:
         print("Error:", result['error'])
     print("Presione cualquier tecla para continuar...")
@@ -37,8 +36,7 @@ def viewPlatesOrden():
     if result['success']:
         print("ID\tNombre\tCantidad\tFecha")
         for plate in result['data']:
-            formatted_date = datetime.strptime(plate[3], "%Y-%m-%d").strftime("%d %b %Y")
-            print(f"{plate[0]}\t{plate[1]}\t{plate[2]}\t{formatted_date}")
+            print(f"{plate[0]}\t{plate[1]}\t{plate[2]}\t{plate[3]}")
     else:
         print("Error:", result['error'])
     print("Presione cualquier tecla para continuar...")
@@ -355,11 +353,14 @@ def start():
     clear()
     print("Bienvenido al sistema")
     print("1. Iniciar sesión")
+    print("2. Registrarse")
     print("3. Salir")
     inicio = input("Ingrese la opción deseada: ")
     if inicio == "1":
         login()
     elif inicio == "2":
+        signin()
+    elif inicio == "3":
         exit()
     else:
         print("Opción no válida")
@@ -549,6 +550,7 @@ def dashboard(rol):
         if rol == "chef":
             print("1. Ver platos ordenados")
             print("2. Salir")
+            opcion = input("Ingrese la opcion")
             if opcion == "1":
                 viewPlatesOrden()
             if opcion == "2":
@@ -557,6 +559,7 @@ def dashboard(rol):
         if rol == "bartender":
             print("1. Ver bebidas ordenadas")
             print("2. Salir")
+            opcion = input("Ingrese la opcion")
             if opcion == "1":
                 viewDrinksOrden()
             if opcion == "2":
